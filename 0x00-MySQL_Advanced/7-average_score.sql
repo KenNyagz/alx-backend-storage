@@ -12,7 +12,7 @@ BEGIN
 	SELECT SUM(score), COUNT(*)
        	INTO total_score,num_projects
 	FROM corrections
-	WHERE user_id = user_id;
+	WHERE corrections.user_id = user_id;
 
 	IF num_projects > 0 THEN
 		UPDATE users
@@ -21,7 +21,7 @@ BEGIN
 	ELSE
 		UPDATE users
 		SET average_score = 0
-		WHERE id = user_id;
+		WHERE users.id = user_id;
 	END IF;
 END//
 
