@@ -9,7 +9,8 @@ BEGIN
 	DECLARE total_score FLOAT;
 	DECLARE num_projects INT;
 
-	SELECT SUM(score) AS total_score, COUNT(*) AS num_projects
+	SELECT SUM(score), COUNT(*)
+       	INTO total_score,num_projects
 	FROM corrections
 	WHERE user_id = user_id;
 
