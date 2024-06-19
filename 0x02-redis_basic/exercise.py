@@ -5,6 +5,19 @@ Class for redis databases and the methods involved in managing the data
 import redis
 from typing import Union, Callable, Optional
 import uuid
+from functools import wraps
+
+
+def count_calls(method: Callable) -> Callable:
+    '''Counts number of times a method has been called'''
+    @wraps(method)
+    def wrapper(self, *args, **kwargs):
+        '''the decorator function'''
+        key = method.__qualname__
+        self._redis.incr(key)
+        return method(self, *args, **kwargs)
+
+    return wrapper
 
 
 class Cache:
@@ -14,6 +27,7 @@ class Cache:
         self._redis = redis.Redis()
         self._redis.flushdb()
 
+    @count_calls
     def store(self, data: Union[str, bytes, int, float]) -> str:
         '''Generate random key and save the data to that key'''
         key = str(uuid.uuid4())
