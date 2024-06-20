@@ -1,4 +1,4 @@
-from exercise import Cache
+from exercise import Cache, replay
 
 cache = Cache()
 
@@ -11,3 +11,10 @@ TEST_CASES = {
 for value, fn in TEST_CASES.items():
     key = cache.store(value)
     assert cache.get(key, fn=fn) == value
+
+
+cache = Cache()
+cache.store("foo")
+cache.store("bar")
+cache.store(42)
+replay(cache.store)

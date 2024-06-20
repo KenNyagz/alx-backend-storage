@@ -73,3 +73,22 @@ class Cache:
         #return self.get(key, lambda x: int(x) if x else None)
         result = self.get(key, lambda x: int(x) if isinstance(x, (bytes, str)) else x)
         return result if isinstance(result, int) else None
+
+
+def replay(method: Callable) -> None:
+    '''displays the calls made to a method and the tot number of times'''
+    redis_client = method.__self__._redis
+    #redis_client = redis.Redis()
+    method_name = method.__qualname__
+
+    inputs_key = f'{method_name}:inputs'
+    outputs_key = f'{method_name}:outputs'
+
+    inputs = redis_client.lrange(inputs_key, 0, -1)
+    outputs = redis_client.lrange(outputs_key, 0, -1)
+
+    tot_calls = len(inputs)
+    print(f'{method_name} was called {tot_calls} times:')
+
+    for input_str, output_str in zip(inputs, outputs):
+        print(f'{method_name}(*{input_str.decode("utf-8")}) -> {output_str.decode("utf-8")}') 
