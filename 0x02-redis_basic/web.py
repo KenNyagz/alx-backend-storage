@@ -22,6 +22,7 @@ def get_page(url: str) -> str:
         return cached_page.decode('utf-8')
 
     response = requests.get(url)
+    # htm_content = response.text # Same thing apparently
     html_content = response.content.decode('utf-8')
 
     redis_client.setex(url, 10, html_content)
