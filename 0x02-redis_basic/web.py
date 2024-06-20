@@ -5,7 +5,7 @@ Track how many times a particular URL was accessed
 import redis
 import requests
 
-#redis_client = redis.Redis()
+redis_client = redis.Redis()
 
 
 def get_page(url: str) -> str:
@@ -13,7 +13,7 @@ def get_page(url: str) -> str:
     if not url or len(url.strip()) == 0:
         return ''
 
-    redis_client = redis.Redis()
+    #redis_client = redis.Redis()
     count_key = f'count:{url}'
     redis_client.incr(count_key)
 
